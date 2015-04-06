@@ -1,3 +1,8 @@
+python_translate
+=====================
+[![Build Status](https://travis-ci.org/adamziel/python_translate.svg?branch=master)](https://travis-ci.org/adamziel/python_translate)
+
+
 Documentation
 =====================
 
@@ -5,7 +10,7 @@ Documentation is available in here:
 https://python-translate.readthedocs.org/en/latest/
 
 
-python_translate
+Overview
 =====================
 
 Most python translation tools are based on gettext. I don't like gettext so
