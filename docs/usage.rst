@@ -254,7 +254,7 @@ The intervals follow the `ISO 31-11`_ notation. The above string specifies
 four different intervals: exactly ``0``, exactly ``1``, ``2-19``, and ``20``
 and higher.
 
-Note that interval definitils will not be present in a translated message,
+Note that interval definitions will not be present in a translated message,
 and they have nothing to do with placeholders such as ``{count}``. They
 will not be formatted, just removed before you get to see them.
 
