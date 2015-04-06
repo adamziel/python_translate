@@ -2,7 +2,7 @@
 from setuptools import setup
 
 setup(
-    name="python_translate",
+    name="python-translate",
     version="1.0.0",
     author="Adam Zieliński",
     author_email="adam@sf2.guru",
