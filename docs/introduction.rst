@@ -173,12 +173,7 @@ loaded like this::
 
     translator.add_resource('yml', 'messages.fr.yml', 'fr_FR')
     translator.add_resource('yml', 'admin.fr.yml', 'fr_FR', 'admin')
-    translator.add_resource(
-        'yml',
-        'navigation.fr.yml',
-        'fr_FR',
-        'navigation'
-    )
+    translator.add_resource('yml', 'navigation.fr.yml', 'fr_FR', 'navigation')
 
 When translating strings that are not in the default domain (``messages``),
 you must specify the domain as the third argument of ``trans()``::
