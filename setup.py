@@ -8,9 +8,9 @@ setup(
     author_email="adam@sf2.guru",
     packages=["python_translate"],
     include_package_data=True,
-    url="http://pypi.python.org/pypi/python_translate_v100/",
+    url="https://github.com/adamziel/python_translate",
 
-    license="LICENSE",
+    license="MIT",
     description="Non-gettext translations for python.",
 
     # Dependent packages (distributions)
