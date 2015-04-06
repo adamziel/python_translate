@@ -187,11 +187,13 @@ all the forms as a string separated by a pipe (``|``)::
 
 To translate pluralized messages, use the `python_translate.translations.Translator.trans_choice` method
 
+
     translator.transchoice(
         'There is one apple|There are {count} apples',
         10,
         {'count': 10}
     )
+    
 
 The second argument (``10`` in this example) is the *number* of objects being
 described and is used to determine which translation to use and also to populate
