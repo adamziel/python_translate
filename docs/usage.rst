@@ -45,7 +45,7 @@ variable with a "placeholder"::
 
     print translated
 
-python_translate will now look for a translation of the raw message (``Hello %name%``)
+python_translate will now look for a translation of the raw message (``Hello {name}``)
 and *then* replace the placeholders with their values. Creating a translation
 is done just as before:
 
@@ -57,7 +57,7 @@ is done just as before:
 
     .. code-block:: json
 
-        {"Hello %name%": "Bonjour %name%"}
+        {"Hello {name}": "Bonjour {name}"}
 
 .. note::
 
