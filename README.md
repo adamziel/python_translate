@@ -2,7 +2,7 @@ Documentation
 =====================
 
 Documentation is available in here:
-https://python_translate.readthedocs.org
+https://python-translate.readthedocs.org/en/latest/
 
 
 python_translate
