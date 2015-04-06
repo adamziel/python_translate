@@ -185,8 +185,7 @@ all the forms as a string separated by a pipe (``|``)::
 
     'There is one apple|There are {count} apples'
 
-To translate pluralized messages, use the
-:method:`python_translate\\Component\\Translation\\Translator::transChoice` method::
+To translate pluralized messages, use the `python_translate.translations.Translator.trans_choice` method
 
     translator.transchoice(
         'There is one apple|There are {count} apples',
