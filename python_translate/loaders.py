@@ -145,7 +145,7 @@ class DictLoader(Loader):
         items = []
         sep = '.'
         for k, v in messages.items():
-            new_key = parent_key + sep + k if parent_key else k
+            new_key = "{0}{1}{2}".format(parent_key, sep, k) if parent_key else k
             if isinstance(v, collections.MutableMapping):
                 items.extend(self.flatten(v, new_key).items())
             else:
