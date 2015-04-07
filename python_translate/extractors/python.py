@@ -20,7 +20,7 @@ class PythonExtractor(ExtensionBasedExtractor):
             tranz_functions=None,
             tranzchoice_functions=None):
         file_extensions = file_extensions if file_extensions is not None else (
-            "py",
+            "*.py",
         )
 
         self.tranz_functions = tranz_functions if tranz_functions is not None else (
