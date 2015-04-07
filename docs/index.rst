@@ -8,3 +8,4 @@ python_translate, translations without gettext
     usage
     custom_formats
     django
+    license

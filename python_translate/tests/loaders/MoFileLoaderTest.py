@@ -53,16 +53,14 @@ class FileLoaderTest(unittest.TestCase):
     def testLoadInvalidResource(self):
         loader = MoFileLoader()
         resource = __DIR__ + '/../fixtures/empty.mo'
-        try:
-            self.assertRaises(
-                InvalidResourceException,
-                lambda: loader.load(
-                    resource,
-                    'en',
-                    'domain1'))
-        except Exception as e:
-            import ipdb
-            ipdb.set_trace()
+        self.assertRaises(
+            InvalidResourceException,
+            lambda: loader.load(
+                resource,
+                'en',
+                'domain1'
+            )
+        )
 
     def testLoadEmptyTranslation(self):
         loader = MoFileLoader()

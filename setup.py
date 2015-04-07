@@ -1,12 +1,12 @@
 # -*- coding: utf-8 -*-
-from setuptools import setup
+from setuptools import setup, find_packages
 
 setup(
     name="python-translate",
-    version="1.0.1",
+    version="1.0.3",
     author="Adam Zieliński",
     author_email="adam@sf2.guru",
-    packages=["python_translate"],
+    packages=find_packages(),
     include_package_data=True,
     url="https://github.com/adamziel/python_translate",
 
