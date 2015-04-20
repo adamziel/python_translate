@@ -8,7 +8,6 @@ file that were distributed with this source code.
 """
 
 import os
-from django.utils.encoding import force_str
 from python_translate.utils import find_files
 
 
@@ -152,8 +151,7 @@ class Translation(object):
         super(Translation, self).__init__()
 
     def __repr__(self):
-        return force_str("<Translation: %s>" % str(self.id)[:25], 'ascii',
-                         errors='replace')
+        return str("<Translation: %s>" % str(self.id)[:25])
 
 
 class TransVar(object):
@@ -184,5 +182,4 @@ class TransVar(object):
             }[self.type],
             str(self.value)[:25]
         )
-        return force_str("<TransVar[%s]: %s>" % fmt, 'ascii',
-                         errors='replace')
+        return str("<TransVar[%s]: %s>" % fmt)
