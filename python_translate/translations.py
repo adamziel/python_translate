@@ -14,7 +14,7 @@ import re
 import collections
 import string
 from datetime import datetime, timedelta
-from python_translate.utils import recursive_update
+from python_translate.utils import recursive_update, CaseInsensitiveDict
 import python_translate.selector as selector
 
 LOCALE_REGEX = re.compile('^[a-z0-9@_\\.\\-]*$', re.I)
@@ -25,6 +25,7 @@ class MessageCatalogue(object):
     def __init__(self, locale, messages=None):
         self.locale = locale
         self.messages = messages or {}
+        self.messages = {k: CaseInsensitiveDict(v) for k,v in self.messages.items()}
         self.resources = {}
         self.metadata = None
         self.parent = None
@@ -62,21 +63,11 @@ class MessageCatalogue(object):
         if domain is None:
             return self.messages
 
-        return self.messages.get(domain, {})
+        return dict(self.messages.get(domain, {}))
 
     def set(self, id, translation, domain='messages'):
         """
         Sets a message translation.
-
-        @type id: The
-        @param id: message id
-
-        @type id: The
-        @param id: message id
-
-        @type id: The
-        @param id: message id
-
         """
         assert isinstance(id, (str, unicode))
         assert isinstance(translation, (str, unicode))
@@ -88,13 +79,6 @@ class MessageCatalogue(object):
         """
         Checks if a message has a translation.
 
-        @type id: The
-        @param id: message id
-
-        @type id: The
-        @param id: message id
-
-
         @rtype: bool
         @return: true if the message has a translation, false otherwise
         """
@@ -105,7 +89,7 @@ class MessageCatalogue(object):
             return True
 
         if self.fallback_catalogue is not None:
-            return self.fallback_catalogue.has(id)
+            return self.fallback_catalogue.has(id, domain)
 
         return False
 
@@ -113,13 +97,6 @@ class MessageCatalogue(object):
         """
         Checks if a message has a translation (it does not take into account
         the fallback mechanism).
-
-        @type id: The
-        @param id: message id
-
-        @type id: The
-        @param id: message id
-
 
         @rtype: bool
         @return: true if the message has a translation, false otherwise
@@ -132,13 +109,6 @@ class MessageCatalogue(object):
     def get(self, id, domain='messages'):
         """
         Gets a message translation.
-
-        @type id: The
-        @param id: message id
-
-        @type id: The
-        @param id: message id
-
 
         @rtype: str
         @return: The message translation
@@ -157,36 +127,22 @@ class MessageCatalogue(object):
     def replace(self, messages, domain='messages'):
         """
         Sets translations for a given domain.
-
-        @type id: The
-        @param id: message id
-
-        @type id: The
-        @param id: message id
-
         """
-        assert isinstance(messages, dict)
+        assert isinstance(messages, (dict, CaseInsensitiveDict))
         assert isinstance(domain, (str, unicode))
 
-        self.messages[domain] = {}
+        self.messages[domain] = CaseInsensitiveDict({})
         self.add(messages, domain)
 
     def add(self, messages, domain='messages'):
         """
         Adds translations for a given domain.
-
-        @type id: The
-        @param id: message id
-
-        @type id: The
-        @param id: message id
-
         """
-        assert isinstance(messages, dict)
+        assert isinstance(messages, (dict, CaseInsensitiveDict))
         assert isinstance(domain, (str, unicode))
 
         if domain not in self.messages:
-            self.messages[domain] = messages
+            self.messages[domain] = CaseInsensitiveDict(messages)
         else:
             self.messages[domain].update(messages)
 
