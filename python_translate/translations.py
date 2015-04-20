@@ -61,9 +61,9 @@ class MessageCatalogue(object):
         @return: A dict of messages
         """
         if domain is None:
-            return self.messages
+            return {k: dict(v) for k, v in self.messages.items()}
 
-        return dict(self.messages.get(domain, {}))
+        return dict(self.messages.get(domain, {})
 
     def set(self, id, translation, domain='messages'):
         """
