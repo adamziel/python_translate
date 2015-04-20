@@ -169,6 +169,15 @@ class YamlFileLoader(DictLoader, FileMixin):
 
         return catalogue
 
+class DummyLoader(DictLoader, FileMixin):
+    
+    def load(self, resource, locale, domain='messages'):
+        catalogue = python_translate.translations.MessageCatalogue(locale)
+        catalogue.add({}, domain)
+        catalogue.add_resource(resource)
+
+        return catalogue
+
 
 class JSONFileLoader(DictLoader, FileMixin):
 
