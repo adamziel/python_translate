@@ -47,7 +47,7 @@ print translator.trans('Hello World!');
 Contributing
 ============
 
-See [CONTRIBUTING](https://github.com/adamziel/django_translate/tree/master/CONTRIBUTING)
+See [CONTRIBUTING.md](https://github.com/adamziel/python_translate/tree/master/CONTRIBUTING.md)
 
 
 License
