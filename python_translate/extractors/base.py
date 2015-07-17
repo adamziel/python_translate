@@ -112,11 +112,11 @@ class ChainExtractor(AbstractExtractor):
         self._extractors[format] = extractor
 
     def set_prefix(self, prefix):
-        for extractor in self._extractors.values():
+        for extractor in list(self._extractors.values()):
             extractor.set_prefix(prefix)
 
     def extract(self, resource, catalogue):
-        for extractor in self._extractors.values():
+        for extractor in list(self._extractors.values()):
             extractor.extract(resource, catalogue)
 
 

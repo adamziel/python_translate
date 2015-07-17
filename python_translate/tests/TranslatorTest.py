@@ -522,15 +522,15 @@ class TranslatorTest(unittest.TestCase):
 
     def testGetMessages(self):
         for resources, locale, expected in self.dataProviderGetMessages():
-            locales = resources.keys()
+            locales = list(resources.keys())
             _locale = locale if locale is not None else locales[0]
             locales = locales[0:locales.index(_locale,)]
 
             translator = Translator(_locale)
             translator.set_fallback_locales(locales[::-1])
             translator.add_loader('dict', loaders.DictLoader())
-            for _locale, domainMessages in resources.items():
-                for domain, messages in domainMessages.items():
+            for _locale, domainMessages in list(resources.items()):
+                for domain, messages in list(domainMessages.items()):
                     translator.add_resource('dict', messages, _locale, domain)
 
             result = translator.get_messages(locale)

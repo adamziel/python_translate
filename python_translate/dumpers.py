@@ -17,6 +17,12 @@ import shutil
 import json
 import yaml
 
+# For python 2 compatibility
+try:
+    unicode
+except NameError:
+    unicode = str
+    
 class Dumper(object):
 
     """
@@ -73,8 +79,12 @@ class FileDumper(Dumper):
                 if not os.path.isdir(dir):
                     os.mkdir(dir)
 
-            with open(full_path, 'w+') as f:
-                f.write(self.format(catalogue, domain))
+            with open(full_path, 'w+b') as f:
+                text = self.format(catalogue, domain)
+                if isinstance(text, unicode):
+                    f.write(text.decode('UTF-8') if hasattr(text, 'decode') else bytes(text, 'UTF-8'))
+                else:
+                    f.write(text)
 
             # ? delete backup ?
 
@@ -135,7 +145,7 @@ class YamlFileDumper(FileDumper):
             catalogue.all(domain),
             encoding='utf-8',
             allow_unicode=True,
-            default_flow_style=False)
+            default_flow_style=False).decode('utf-8')
 
     def get_extension(self):
         return 'yml'
@@ -167,7 +177,7 @@ class PoFileDumper(FileDumper):
             'Language': catalogue.locale,
         }
 
-        for source, target in catalogue.all(domain).items():
+        for source, target in list(catalogue.all(domain).items()):
             po.append(polib.POEntry(
                 msgid=source,
                 msgstr=target

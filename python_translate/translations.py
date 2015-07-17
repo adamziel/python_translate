@@ -19,13 +19,18 @@ import python_translate.selector as selector
 
 LOCALE_REGEX = re.compile('^[a-z0-9@_\\.\\-]*$', re.I)
 
-
+# For python 2 compatibility
+try:
+    unicode
+except NameError:
+    unicode = str
+    
 class MessageCatalogue(object):
 
     def __init__(self, locale, messages=None):
         self.locale = locale
         self.messages = messages or {}
-        self.messages = {k: CaseInsensitiveDict(v) for k,v in self.messages.items()}
+        self.messages = {k: CaseInsensitiveDict(v) for k,v in list(self.messages.items())}
         self.resources = {}
         self.metadata = None
         self.parent = None
@@ -46,7 +51,7 @@ class MessageCatalogue(object):
         @rtype: list
         @return: A list of domains
         """
-        return self.messages.keys()
+        return list(self.messages.keys())
 
     def all(self, domain=None):
         """
@@ -61,7 +66,7 @@ class MessageCatalogue(object):
         @return: A dict of messages
         """
         if domain is None:
-            return {k: dict(v) for k, v in self.messages.items()}
+            return {k: dict(v) for k, v in list(self.messages.items())}
 
         return dict(self.messages.get(domain, {}))
 
@@ -163,7 +168,7 @@ class MessageCatalogue(object):
                 'current locale for this catalogue is "%s"' %
                 (catalogue.locale, self.locale))
 
-        for domain, messages in catalogue.all().items():
+        for domain, messages in list(catalogue.all().items()):
             self.add(messages, domain)
 
         for resource in catalogue.resources:
@@ -207,14 +212,14 @@ class MessageCatalogue(object):
         @rtype: list
         @return:s: An array of resources
         """
-        return self.resources.values()
+        return list(self.resources.values())
 
     def add_resource(self, resource):
         """
         Adds a resource for this collection.
         :param: resource A resource instance
         """
-        self.resources[resource.__str__()] = resource
+        self.resources[unicode(resource)] = resource
 
 
 class Translator(object):

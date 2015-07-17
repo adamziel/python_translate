@@ -18,7 +18,6 @@ import json
 import collections
 import python_translate.translations
 
-
 class NotFoundResourceException(Exception):
     pass
 
@@ -69,7 +68,7 @@ class FileMixin(object):
         @param path: path to check
 
         """
-        if not isinstance(path, (str, unicode)):
+        if not isinstance(path, str):
             raise NotFoundResourceException(
                 "Resource passed to load() method must be a file path")
 
@@ -144,10 +143,10 @@ class DictLoader(Loader):
         """
         items = []
         sep = '.'
-        for k, v in messages.items():
+        for k, v in list(messages.items()):
             new_key = "{0}{1}{2}".format(parent_key, sep, k) if parent_key else k
             if isinstance(v, collections.MutableMapping):
-                items.extend(self.flatten(v, new_key).items())
+                items.extend(list(self.flatten(v, new_key).items()))
             else:
                 items.append((new_key, v))
         return dict(items)
@@ -159,6 +158,7 @@ class YamlFileLoader(DictLoader, FileMixin):
         messages = yaml.safe_load(self.read_file(resource))
         if messages is None:
             messages = {}
+        
 
         if not isinstance(messages, dict):
             raise InvalidResourceException(

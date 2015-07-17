@@ -53,7 +53,7 @@ def recursive_update(_dict, _update):
 
     @return:
     """
-    for k, v in _update.iteritems():
+    for k, v in _update.items():
         if isinstance(v, collections.Mapping):
             r = recursive_update(_dict.get(k, {}), v)
             _dict[k] = r
@@ -121,7 +121,7 @@ class CaseInsensitiveDict(collections.MutableMapping):
         del self._store[key.lower()]
 
     def __iter__(self):
-        return (casedkey for casedkey, mappedvalue in self._store.values())
+        return (casedkey for casedkey, mappedvalue in list(self._store.values()))
 
     def __len__(self):
         return len(self._store)
@@ -131,7 +131,7 @@ class CaseInsensitiveDict(collections.MutableMapping):
         return (
             (lowerkey, keyval[1])
             for (lowerkey, keyval)
-            in self._store.items()
+            in list(self._store.items())
         )
 
     def __eq__(self, other):
@@ -144,7 +144,7 @@ class CaseInsensitiveDict(collections.MutableMapping):
 
     # Copy is required
     def copy(self):
-         return CaseInsensitiveDict(self._store.values())
+         return CaseInsensitiveDict(list(self._store.values()))
 
     def __repr__(self):
-        return '%s(%r)' % (self.__class__.__name__, dict(self.items()))
+        return '%s(%r)' % (self.__class__.__name__, dict(list(self.items())))

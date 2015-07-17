@@ -12,6 +12,7 @@ files that were distributed with this source code.
 
 import re
 from decimal import Decimal
+from collections import OrderedDict
 
 INTERVAL_REGEX = re.compile("""
     ({\s*
@@ -95,7 +96,7 @@ def select_message(message, number, locale):
     @raises: ValueError
     """
     parts = message.split("|")
-    explicit_rules = {}
+    explicit_rules = OrderedDict()
     standard_rules = []
     for part in parts:
         part = part.strip()
@@ -109,8 +110,8 @@ def select_message(message, number, locale):
         else:
             standard_rules.append(part)
 
-    # try to match an explicit rule, then fallback to the standard ones
-    for interval, m in explicit_rules.items():
+    # try to match an explicit rule, then to the standard ones
+    for interval, m in list(explicit_rules.items()):
         if test_interval(number, interval):
             return m
 

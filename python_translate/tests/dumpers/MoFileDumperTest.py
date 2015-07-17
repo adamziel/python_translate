@@ -30,9 +30,9 @@ class FileDumperTest(unittest.TestCase):
         dumper = MoFileDumper()
         dumper.dump(catalogue, {"path": tmp_dir})
 
-        with open(__DIR__ + '/../fixtures/resources.mo') as f1:
-            with open(tmp_dir + '/messages.en.mo') as f2:
-                self.assertEqual(f1.read(), f2.read())
+        with open(__DIR__ + '/../fixtures/resources.mo', 'rb') as f1:
+            with open(tmp_dir + '/messages.en.mo', 'rb') as f2:
+                self.assertEquals(f1.read(), f2.read())
 
         os.unlink(tmp_dir + '/messages.en.mo')
 

@@ -33,7 +33,8 @@ class FileDumperTest(unittest.TestCase):
 
         with open(__DIR__ + '/../fixtures/resources.yml') as f1:
             with open(tmp_dir + '/messages.en.yml') as f2:
-                self.assertEqual(f1.read(), f2.read())
+                a = f2.read()
+                self.assertEqual(f1.read(), a)
 
         os.unlink(tmp_dir + '/messages.en.yml')
 

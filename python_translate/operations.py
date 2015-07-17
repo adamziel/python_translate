@@ -124,14 +124,14 @@ class DiffOperation(AbstractOperation):
             'obsolete': {},
         }
 
-        for id, message in self.source.all(domain).items():
+        for id, message in list(self.source.all(domain).items()):
             if self.target.has(id, domain):
                 self.messages[domain]['all'][id] = message
                 self.result.add({id: message}, domain)
             else:
                 self.messages[domain]['obsolete'][id] = message
 
-        for id, message in self.target.all(domain).items():
+        for id, message in list(self.target.all(domain).items()):
             if not self.source.has(id, domain):
                 self.messages[domain]['all'][id] = message
                 self.messages[domain]['new'][id] = message
@@ -151,11 +151,11 @@ class MergeOperation(AbstractOperation):
             'obsolete': {},
         }
 
-        for id, message in self.source.all(domain).items():
+        for id, message in list(self.source.all(domain).items()):
             self.messages[domain]['all'][id] = message
             self.result.add({id: message}, domain)
 
-        for id, message in self.target.all(domain).items():
+        for id, message in list(self.target.all(domain).items()):
             if not self.source.has(id, domain):
                 self.messages[domain]['all'][id] = message
                 self.messages[domain]['new'][id] = message

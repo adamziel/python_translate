@@ -26,7 +26,7 @@ class TranslatorTest(unittest.TestCase):
     def testGetDomains(self):
         catalogue = MessageCatalogue('en', {"domain1": {}, "domain2": {}})
 
-        self.assertEquals(['domain2', 'domain1'], catalogue.get_domains())
+        self.assertEquals(['domain1', 'domain2'], sorted(catalogue.get_domains()))
 
     def testAll(self):
         messages = dict(domain1=dict(foo='foo'), domain2=dict(bar='bar'))
@@ -101,7 +101,9 @@ class TranslatorTest(unittest.TestCase):
         self.assertEquals('foo', catalogue.get('foo', 'domain1'))
         self.assertEquals('foo1', catalogue.get('foo1', 'domain1'))
 
-        self.assertEquals(['r', 'r1'], catalogue.get_resources())
+        resources = catalogue.get_resources()
+        resources.sort(key=len)
+        self.assertEquals(['r', 'r1'], resources)
 
     def testadd_fallback_catalogue(self):
         catalogue = MessageCatalogue(
@@ -124,7 +126,9 @@ class TranslatorTest(unittest.TestCase):
         self.assertEquals('foo', catalogue.get('foo', 'domain1'))
         self.assertEquals('foo1', catalogue.get('foo1', 'domain1'))
 
-        self.assertEquals(['r', 'r1'], catalogue.get_resources())
+        resources = catalogue.get_resources()
+        resources.sort(key=len)
+        self.assertEquals(['r', 'r1'], resources)
 
     def testadd_fallback_catalogueWithCircularReference(self):
         main = MessageCatalogue('en_US')
@@ -150,7 +154,9 @@ class TranslatorTest(unittest.TestCase):
         catalogue.add_resource('r')
         catalogue.add_resource('r1')
 
-        self.assertEquals(['r', 'r1'], catalogue.get_resources())
+        resources = catalogue.get_resources()
+        resources.sort(key=len)
+        self.assertEquals(['r', 'r1'], resources)
 
     """
     # @TODO

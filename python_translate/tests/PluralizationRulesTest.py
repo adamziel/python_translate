@@ -53,7 +53,7 @@ class PluralizationRulesTest(unittest.TestCase):
         ]
 
     def validate_matrix(self, nplural, matrix, expect_success=True):
-        for lang_code, data in matrix.items():
+        for lang_code, data in list(matrix.items()):
             indexes = set(data.values())
             if expect_success:
                 self.assertEqual(
@@ -73,7 +73,7 @@ class PluralizationRulesTest(unittest.TestCase):
     def generate_test_data(self, plural, lang_codes):
         matrix = collections.defaultdict(lambda: {})
         for lang_code in lang_codes:
-            for count in xrange(0, 201):
+            for count in range(0, 201):
                 plural = PluralizationRules.get(count, lang_code)
                 matrix[lang_code][count] = plural
 

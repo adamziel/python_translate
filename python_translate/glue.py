@@ -49,7 +49,7 @@ class TransationLoader(object):
         if not os.path.isdir(directory):
             raise ValueError("{0} is not a directory".format(directory))
 
-        for format, loader in self.loaders.items():
+        for format, loader in list(self.loaders.items()):
             extension = "{0}.{1}".format(catalogue.locale, format)
             files = find_files(directory, "*.{0}".format(extension))
             for file in files:
@@ -86,7 +86,7 @@ class TranslationWriter(object):
         """
         Disables dumper backup.
         """
-        for dumper in self.dumpers.values():
+        for dumper in list(self.dumpers.values()):
             dumper.set_backup(False)
 
     def get_formats(self):
@@ -95,7 +95,7 @@ class TranslationWriter(object):
 
         @rtype: list
         """
-        return self.dumpers.keys()
+        return list(self.dumpers.keys())
 
     def write_translations(self, catalogue, format, options={}):
         """
