@@ -156,7 +156,7 @@ class PoFileDumper(FileDumper):
             msg = "You need to install polib to use PoFileDumper or MoFileDumper"
             msg = msg + \
                 "\nOriginal message: {0} {1}".format(exc_type.__name__, exc_value)
-            raise ImportError(msg), None, exc_traceback
+            raise ImportError(msg) #, None, exc_traceback
 
         po = polib.POFile()
         po.metadata = {

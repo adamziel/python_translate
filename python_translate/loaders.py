@@ -108,7 +108,7 @@ class FileMixin(object):
         exc_type, exc_value, exc_traceback = sys.exc_info()
         msg = msg + \
             "\nOriginal message: {0} {1}".format(exc_type.__name__, exc_value)
-        raise _type(msg), None, exc_traceback
+        raise _type(msg) #, None, exc_traceback
 
 
 class DictLoader(Loader):
