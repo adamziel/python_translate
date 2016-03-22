@@ -96,7 +96,7 @@ class ExtensionBasedExtractor(BaseExtractor):
         super(ExtensionBasedExtractor, self).__init__()
 
     def can_be_extracted(self, file):
-        return os.path.isfile(file) and file.endswith(self.file_extensions)
+        return os.path.isfile(file) and file.endswith(tuple([e.replace('*', '') for e in self.file_extensions]))
 
     def _extract_from_directory(self, resource):
         return find_files(resource, self.file_extensions)
