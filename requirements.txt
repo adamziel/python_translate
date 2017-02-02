@@ -1,4 +1,0 @@
-PyYAML==3.11
-polib==1.0.6
-codegen==1.0
-

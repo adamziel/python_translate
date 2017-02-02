@@ -15,8 +15,8 @@ setup(
 
     # Dependent packages (distributions)
     install_requires=[
-        "PyYAML==3.11",
-        "codegen==1.0",
-        "polib==1.0.6"
+        "PyYAML>=3.11",
+        "codegen>=1.0",
+        "polib>=1.0.6"
     ],
 )
