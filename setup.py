@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name="python-translate",
-    version="1.0.12",
+    version="1.0.13",
     author="Adam Zieliński",
     author_email="adam@sf2.guru",
     packages=find_packages(),
