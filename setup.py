@@ -3,9 +3,9 @@ from setuptools import setup, find_packages
 
 setup(
     name="python-translate",
-    version="1.0.14",
+    version="1.0.15",
     author="Adam Zieliński",
-    author_email="adam@sf2.guru",
+    author_email="adam@adamziel.com",
     packages=find_packages(),
     include_package_data=True,
     url="https://github.com/adamziel/python_translate",
