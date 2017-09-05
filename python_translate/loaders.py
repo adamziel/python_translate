@@ -86,7 +86,7 @@ class FileMixin(object):
 
         self.assert_valid_path(path)
 
-        with open(path, 'r') as file:
+        with open(path, 'r', encoding='utf-8') as file:
             contents = file.read()
 
         return contents
