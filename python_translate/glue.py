@@ -50,7 +50,7 @@ class TransationLoader(object):
             raise ValueError("{0} is not a directory".format(directory))
 
         for format, loader in list(self.loaders.items()):
-            extension = "{0}.not.{1}".format(catalogue.locale, format)
+            extension = "{0}.{1}".format(catalogue.locale, format)
             files = find_files(directory, "*.{0}".format(extension))
             for file in files:
                 domain = file.split("/")[-1][:-1 * len(extension) - 1]

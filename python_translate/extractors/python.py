@@ -33,7 +33,6 @@ class PythonExtractor(ExtensionBasedExtractor):
 
     def extract_translations(self, string):
         """Extract messages from Python string."""
-        return []
         tree = ast.parse(string)
         # ast_visit(tree)
         visitor = TransVisitor(
