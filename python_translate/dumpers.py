@@ -132,7 +132,7 @@ class FileDumper(Dumper):
 class JSONFileDumper(FileDumper):
 
     def format(self, catalogue, domain):
-        return '' # json.dumps(catalogue.all(domain), indent=4)
+        return json.dumps(catalogue.all(domain), indent=4)
 
     def get_extension(self):
         return 'json'
@@ -149,6 +149,162 @@ class YamlFileDumper(FileDumper):
 
     def get_extension(self):
         return 'yml'
+
+class PoFileDumper1(FileDumper):
+
+    def format(self, catalogue, domain):
+        return self._build_po_file(
+            catalogue,
+            domain).__unicode__().encode("utf-8")
+
+    def _build_po_file(self, catalogue, domain):
+        try:
+            import polib
+        except ImportError as e:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            msg = "You need to install polib to use PoFileDumper or MoFileDumper"
+            msg = msg + \
+                "\nOriginal message: {0} {1}".format(exc_type.__name__, exc_value)
+            raise ImportError(msg) #, None, exc_traceback
+
+        po = polib.POFile()
+        po.metadata = {
+            # 'msgid': '',
+            # 'msgstr': '',
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Content-Transfer-Encoding': '8bit',
+            'Language': catalogue.locale,
+        }
+
+        for source, target in list(catalogue.all(domain).items()):
+            po.append(polib.POEntry(
+                msgid=source,
+                msgstr=target
+            ))
+
+        return po
+
+    def get_extension(self):
+        return 'po'
+
+
+
+class PoFileDumper2(FileDumper):
+
+    def format(self, catalogue, domain):
+        return self._build_po_file(
+            catalogue,
+            domain).__unicode__().encode("utf-8")
+
+    def _build_po_file(self, catalogue, domain):
+        try:
+            import polib
+        except ImportError as e:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            msg = "You need to install polib to use PoFileDumper or MoFileDumper"
+            msg = msg + \
+                "\nOriginal message: {0} {1}".format(exc_type.__name__, exc_value)
+            raise ImportError(msg) #, None, exc_traceback
+
+        po = polib.POFile()
+        po.metadata = {
+            # 'msgid': '',
+            # 'msgstr': '',
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Content-Transfer-Encoding': '8bit',
+            'Language': catalogue.locale,
+        }
+
+        for source, target in list(catalogue.all(domain).items()):
+            po.append(polib.POEntry(
+                msgid=source,
+                msgstr=target
+            ))
+
+        return po
+
+    def get_extension(self):
+        return 'po'
+
+
+
+class PoFileDumper3(FileDumper):
+
+    def format(self, catalogue, domain):
+        return self._build_po_file(
+            catalogue,
+            domain).__unicode__().encode("utf-8")
+
+    def _build_po_file(self, catalogue, domain):
+        try:
+            import polib
+        except ImportError as e:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            msg = "You need to install polib to use PoFileDumper or MoFileDumper"
+            msg = msg + \
+                "\nOriginal message: {0} {1}".format(exc_type.__name__, exc_value)
+            raise ImportError(msg) #, None, exc_traceback
+
+        po = polib.POFile()
+        po.metadata = {
+            # 'msgid': '',
+            # 'msgstr': '',
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Content-Transfer-Encoding': '8bit',
+            'Language': catalogue.locale,
+        }
+
+        for source, target in list(catalogue.all(domain).items()):
+            po.append(polib.POEntry(
+                msgid=source,
+                msgstr=target
+            ))
+
+        return po
+
+    def get_extension(self):
+        return 'po'
+
+
+
+
+class PoFileDumper4(FileDumper):
+
+    def format(self, catalogue, domain):
+        return self._build_po_file(
+            catalogue,
+            domain).__unicode__().encode("utf-8")
+
+    def _build_po_file(self, catalogue, domain):
+        try:
+            import polib
+        except ImportError as e:
+            exc_type, exc_value, exc_traceback = sys.exc_info()
+            msg = "You need to install polib to use PoFileDumper or MoFileDumper"
+            msg = msg + \
+                "\nOriginal message: {0} {1}".format(exc_type.__name__, exc_value)
+            raise ImportError(msg) #, None, exc_traceback
+
+        po = polib.POFile()
+        po.metadata = {
+            # 'msgid': '',
+            # 'msgstr': '',
+            'Content-Type': 'text/plain; charset=utf-8',
+            'Content-Transfer-Encoding': '8bit',
+            'Language': catalogue.locale,
+        }
+
+        for source, target in list(catalogue.all(domain).items()):
+            po.append(polib.POEntry(
+                msgid=source,
+                msgstr=target
+            ))
+
+        return po
+
+    def get_extension(self):
+        return 'po'
+
 
 
 class PoFileDumper(FileDumper):
