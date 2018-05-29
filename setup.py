@@ -17,6 +17,7 @@ setup(
     install_requires=[
         "PyYAML>=3.11",
         "codegen>=1.0",
-        "polib>=1.0.6"
+        "polib>=1.0.6",
+        "coverage==4.5.1"
     ],
 )
