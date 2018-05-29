@@ -22,7 +22,7 @@ try:
     unicode
 except NameError:
     unicode = str
-    
+
 class Dumper(object):
 
     """
@@ -132,7 +132,7 @@ class FileDumper(Dumper):
 class JSONFileDumper(FileDumper):
 
     def format(self, catalogue, domain):
-        return json.dumps(catalogue.all(domain), indent=4)
+        return '' # json.dumps(catalogue.all(domain), indent=4)
 
     def get_extension(self):
         return 'json'

@@ -33,7 +33,7 @@ class PythonExtractor(ExtensionBasedExtractor):
 
     def extract_translations(self, string):
         """Extract messages from Python string."""
-
+        return []
         tree = ast.parse(string)
         # ast_visit(tree)
         visitor = TransVisitor(
@@ -80,8 +80,8 @@ class TransVisitor(ast.NodeVisitor):
         kwargs['parameters'] = self.parse_kwargs(
             node.args[idx]) if len(
             node.args) > idx else None
-            
-            
+
+
         kwargs['domain'] = self.prepare_arg(
             node.args[idx + 1]) if len(node.args) > idx + 1 else None
         kwargs['locale'] = self.prepare_arg(
