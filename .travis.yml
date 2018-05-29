@@ -21,7 +21,7 @@ before_script:
   - ./cc-test-reporter before-build
 
 script:
- - coverage run test.py
+ - if [[ "$TRAVIS_PYTHON_VERSION" == "3.4" ]]; then coverage run test.py; else python test.py; fi;
 
 after_script:
  - coverage xml
