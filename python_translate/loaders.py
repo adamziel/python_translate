@@ -158,7 +158,7 @@ class YamlFileLoader(DictLoader, FileMixin):
         messages = yaml.safe_load(self.read_file(resource))
         if messages is None:
             messages = {}
-        
+
 
         if not isinstance(messages, dict):
             raise InvalidResourceException(
@@ -170,7 +170,7 @@ class YamlFileLoader(DictLoader, FileMixin):
         return catalogue
 
 class DummyLoader(DictLoader, FileMixin):
-    
+
     def load(self, resource, locale, domain='messages'):
         catalogue = python_translate.translations.MessageCatalogue(locale)
         catalogue.add({}, domain)
@@ -336,16 +336,6 @@ def addLevelName(level, levelName):
     finally:
         _releaseLock()
 
-if hasattr(sys, '_getframe'):
-    currentframe = lambda: sys._getframe(3)
-else: #pragma: no cover
-    def currentframe():
-        """Return the frame object for the caller's stack frame."""
-        try:
-            raise Exception
-        except Exception:
-            return sys.exc_info()[2].tb_frame.f_back
-
 #
 # _srcfile is used when walking the stack to check when we've got the first
 # caller stack frame, by skipping frames whose filename is that of this
@@ -357,8 +347,6 @@ else: #pragma: no cover
 # filename from a handy code object from a function defined in this module.
 # (There's no particular reason for picking addLevelName.)
 #
-
-_srcfile = os.path.normcase(addLevelName.__code__.co_filename)
 
 # _srcfile is only used in conjunction with sys._getframe().
 # To provide compatibility with older versions of Python, set _srcfile
@@ -393,7 +381,6 @@ def _checkLevel(level):
 #the lock would already have been acquired - so we need an RLock.
 #The same argument applies to Loggers and Manager.loggerDict.
 #
-_lock = threading.RLock()
 
 def _acquireLock():
     """
