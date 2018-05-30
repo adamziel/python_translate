@@ -25,6 +25,7 @@ script:
 after_script:
  - coverage xml
  - if [[ "$TRAVIS_PYTHON_VERSION" == "3.4" ]]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+ - if [[ "$TRAVIS_PYTHON_VERSION" == "3.4" ]]; then codecov; fi
 
 notifications:
   email:
