@@ -2,6 +2,7 @@ env:
   global:
     - GIT_COMMITTED_AT=$(if [ "$TRAVIS_PULL_REQUEST" == "false" ]; then git log -1 --pretty=format:%ct; else git log -1 --skip 1 --pretty=format:%ct; fi)
     - CC_TEST_REPORTER_ID=fc8190513fa3e000945c47961c0480057d52b0bc0c2d18988a8e0e7c3abe1c54
+    - CODACY_PROJECT_TOKEN=f8ed5b740db64d5989b530082b1d92d1
 
 language: python
 
@@ -25,6 +26,8 @@ script:
 after_script:
  - coverage xml
  - if [[ "$TRAVIS_PYTHON_VERSION" == "3.4" ]]; then ./cc-test-reporter after-build --exit-code $TRAVIS_TEST_RESULT; fi
+ - if [[ "$TRAVIS_PYTHON_VERSION" == "3.4" ]]; then python-codacy-coverage -r coverage.xml; fi
+ - if [[ "$TRAVIS_PYTHON_VERSION" == "3.4" ]]; then codecov;; fi
  
 notifications:
   email: 

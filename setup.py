@@ -20,6 +20,8 @@ setup(
         "PyYAML>=3.11",
         "codegen>=1.0",
         "polib>=1.0.6",
-        "coverage==4.5.1"
+        "coverage==4.5.1",
+        "codacy-coverage==1.3.11",
+        "codecov==2.0.15"
     ],
 )
