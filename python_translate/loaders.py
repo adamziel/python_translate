@@ -284,3 +284,232 @@ class MoFileLoader(PoFileLoader):
             self.rethrow(
                 "Invalid resource {0}".format(resource),
                 InvalidResourceException)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+def getLevelName(level):
+    """
+    Return the textual representation of logging level 'level'.
+    If the level is one of the predefined levels (CRITICAL, ERROR, WARNING,
+    INFO, DEBUG) then you get the corresponding string. If you have
+    associated levels with names using addLevelName then the name you have
+    associated with 'level' is returned.
+    If a numeric value corresponding to one of the defined levels is passed
+    in, the corresponding string representation is returned.
+    Otherwise, the string "Level %s" % level is returned.
+    """
+    # See Issues #22386, #27937 and #29220 for why it's this way
+    result = _levelToName.get(level)
+    if result is not None:
+        return result
+    result = _nameToLevel.get(level)
+    if result is not None:
+        return result
+    return "Level %s" % level
+
+def addLevelName(level, levelName):
+    """
+    Associate 'levelName' with 'level'.
+    This is used when converting levels to text during message formatting.
+    """
+    _acquireLock()
+    try:    #unlikely to cause an exception, but you never know...
+        _levelToName[level] = levelName
+        _nameToLevel[levelName] = level
+    finally:
+        _releaseLock()
+
+if hasattr(sys, '_getframe'):
+    currentframe = lambda: sys._getframe(3)
+else: #pragma: no cover
+    def currentframe():
+        """Return the frame object for the caller's stack frame."""
+        try:
+            raise Exception
+        except Exception:
+            return sys.exc_info()[2].tb_frame.f_back
+
+#
+# _srcfile is used when walking the stack to check when we've got the first
+# caller stack frame, by skipping frames whose filename is that of this
+# module's source. It therefore should contain the filename of this module's
+# source file.
+#
+# Ordinarily we would use __file__ for this, but frozen modules don't always
+# have __file__ set, for some reason (see Issue #21736). Thus, we get the
+# filename from a handy code object from a function defined in this module.
+# (There's no particular reason for picking addLevelName.)
+#
+
+_srcfile = os.path.normcase(addLevelName.__code__.co_filename)
+
+# _srcfile is only used in conjunction with sys._getframe().
+# To provide compatibility with older versions of Python, set _srcfile
+# to None if _getframe() is not available; this value will prevent
+# findCaller() from being called. You can also do this if you want to avoid
+# the overhead of fetching caller information, even when _getframe() is
+# available.
+#if not hasattr(sys, '_getframe'):
+#    _srcfile = None
+
+
+def _checkLevel(level):
+    if isinstance(level, int):
+        rv = level
+    elif str(level) == level:
+        if level not in _nameToLevel:
+            raise ValueError("Unknown level: %r" % level)
+        rv = _nameToLevel[level]
+    else:
+        raise TypeError("Level not an integer or a valid string: %r" % level)
+    return rv
+
+#---------------------------------------------------------------------------
+#   Thread-related stuff
+#---------------------------------------------------------------------------
+
+#
+#_lock is used to serialize access to shared data structures in this module.
+#This needs to be an RLock because fileConfig() creates and configures
+#Handlers, and so might arbitrary user threads. Since Handler code updates the
+#shared dictionary _handlers, it needs to acquire the lock. But if configuring,
+#the lock would already have been acquired - so we need an RLock.
+#The same argument applies to Loggers and Manager.loggerDict.
+#
+_lock = threading.RLock()
+
+def _acquireLock():
+    """
+    Acquire the module-level lock for serializing access to shared data.
+    This should be released with _releaseLock().
+    """
+    if _lock:
+        _lock.acquire()
+
+def _releaseLock():
+    """
+    Release the module-level lock acquired by calling _acquireLock().
+    """
+    if _lock:
+        _lock.release()
+
+#---------------------------------------------------------------------------
+#   The logging record
+#---------------------------------------------------------------------------
+
+class LogRecord(object):
+    """
+    A LogRecord instance represents an event being logged.
+    LogRecord instances are created every time something is logged. They
+    contain all the information pertinent to the event being logged. The
+    main information passed in is in msg and args, which are combined
+    using str(msg) % args to create the message field of the record. The
+    record also includes information such as when the record was created,
+    the source line where the logging call was made, and any exception
+    information to be logged.
+    """
+    def __init__(self, name, level, pathname, lineno,
+                 msg, args, exc_info, func=None, sinfo=None, **kwargs):
+        """
+        Initialize a logging record with interesting information.
+        """
+        ct = time.time()
+        self.name = name
+        self.msg = msg
+        #
+        # The following statement allows passing of a dictionary as a sole
+        # argument, so that you can do something like
+        #  logging.debug("a %(a)d b %(b)s", {'a':1, 'b':2})
+        # Suggested by Stefan Behnel.
+        # Note that without the test for args[0], we get a problem because
+        # during formatting, we test to see if the arg is present using
+        # 'if self.args:'. If the event being logged is e.g. 'Value is %d'
+        # and if the passed arg fails 'if self.args:' then no formatting
+        # is done. For example, logger.warning('Value is %d', 0) would log
+        # 'Value is %d' instead of 'Value is 0'.
+        # For the use case of passing a dictionary, this should not be a
+        # problem.
+        # Issue #21172: a request was made to relax the isinstance check
+        # to hasattr(args[0], '__getitem__'). However, the docs on string
+        # formatting still seem to suggest a mapping object is required.
+        # Thus, while not removing the isinstance check, it does now look
+        # for collections.abc.Mapping rather than, as before, dict.
+        if (args and len(args) == 1 and isinstance(args[0], collections.abc.Mapping)
+            and args[0]):
+            args = args[0]
+        self.args = args
+        self.levelname = getLevelName(level)
+        self.levelno = level
+        self.pathname = pathname
+        try:
+            self.filename = os.path.basename(pathname)
+            self.module = os.path.splitext(self.filename)[0]
+        except (TypeError, ValueError, AttributeError):
+            self.filename = pathname
+            self.module = "Unknown module"
+        self.exc_info = exc_info
+        self.exc_text = None      # used to cache the traceback text
+        self.stack_info = sinfo
+        self.lineno = lineno
+        self.funcName = func
+        self.created = ct
+        self.msecs = (ct - int(ct)) * 1000
+        self.relativeCreated = (self.created - _startTime) * 1000
+        if logThreads:
+            self.thread = threading.get_ident()
+            self.threadName = threading.current_thread().name
+        else: # pragma: no cover
+            self.thread = None
+            self.threadName = None
+        if not logMultiprocessing: # pragma: no cover
+            self.processName = None
+        else:
+            self.processName = 'MainProcess'
+            mp = sys.modules.get('multiprocessing')
+            if mp is not None:
+                # Errors may occur if multiprocessing has not finished loading
+                # yet - e.g. if a custom import hook causes third-party code
+                # to run when multiprocessing calls import. See issue 8200
+                # for an example
+                try:
+                    self.processName = mp.current_process().name
+                except Exception: #pragma: no cover
+                    pass
+        if logProcesses and hasattr(os, 'getpid'):
+            self.process = os.getpid()
+        else:
+            self.process = None
+
+    def __str__(self):
+        return '<LogRecord: %s, %s, %s, %s, "%s">'%(self.name, self.levelno,
+            self.pathname, self.lineno, self.msg)
+
+    __repr__ = __str__
+
+    def getMessage(self):
+        """
+        Return the message for this LogRecord.
+        Return the message for this LogRecord after merging any user-supplied
+        arguments with the message.
+        """
+        msg = str(self.msg)
+        if self.args:
+            msg = msg % self.args
+        return msg
